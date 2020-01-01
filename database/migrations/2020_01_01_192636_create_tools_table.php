@@ -24,8 +24,9 @@ class CreateToolsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('link');
-            $table->text('description'); 
+            $table->text('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
