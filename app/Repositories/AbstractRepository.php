@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Contracts\RepositoryInterface;  
+use App\Contracts\RepositoryInterface;
 
 abstract class AbstractRepository implements RepositoryInterface
-{ 
+{
 
     /**
      * @var \Illuminate\Database\Eloquent\Model
@@ -14,7 +14,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
     public function __construct()
     {
-        $this->setupModel(); 
+        $this->setupModel();
     }
 
     /**
@@ -110,6 +110,4 @@ abstract class AbstractRepository implements RepositoryInterface
     {
         return $this->model->where($field, 'like', '%' . $value . '%')->get($columns);
     }
-
-
 }
