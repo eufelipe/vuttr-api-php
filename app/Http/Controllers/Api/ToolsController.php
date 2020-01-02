@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\ToolRepository;
 use App\Http\Requests\ToolsRequest;
 use App\Http\Resources\ToolResource;
+use App\Models\Tool;
 
 class ToolsController extends Controller
 {
@@ -50,5 +51,19 @@ class ToolsController extends Controller
         $tool = $this->toolRepository->update($data, $id);
 
         return new ToolResource($tool);
+    }
+
+
+
+    /**
+     * Método para deletar um registro
+     * 
+     * @param $id
+     * 
+     */
+    public function destroy(int $id)
+    {
+        $this->toolRepository->delete($id);
+        return response()->noContent();
     }
 }

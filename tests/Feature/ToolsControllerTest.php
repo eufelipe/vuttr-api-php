@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -13,13 +11,10 @@ use Illuminate\Support\Facades\Lang;
 
 use App\Models\Tool;
 
-
 class ToolsControllerTest extends TestCase
 {
 
     use WithoutMiddleware;
-
-
 
     /**
      * Testa se implementa Controller
@@ -33,7 +28,6 @@ class ToolsControllerTest extends TestCase
         $this->assertInstanceOf($expected, $actual);
     }
 
-
     /**
      * Testa se esta retornando a listagem de tools.
      */
@@ -45,7 +39,6 @@ class ToolsControllerTest extends TestCase
             ->assertSee('[')
             ->assertSee(']');
     }
-
 
     /**
      * Testa se é possivel criar um registro.
@@ -94,7 +87,6 @@ class ToolsControllerTest extends TestCase
             ->assertStatus($bad_request);
     }
 
-
     /**
      * Testa se é possivel atualizar um registro
      */
@@ -109,7 +101,7 @@ class ToolsControllerTest extends TestCase
 
         $tool = Tool::create($data);
 
-        $update = [ 
+        $update = [
             "title" => "Titulo updated",
             "link" => "https://link.com.updated",
             "description" => "description updated",
@@ -120,6 +112,37 @@ class ToolsControllerTest extends TestCase
             ->assertStatus(200)
             ->assertSee("Titulo updated")
             ->assertSee("id");
+    }
 
+    /**
+     * Testa se é possivel deletar um registro.
+     */
+    public function test_if_can_delete_a_tool_record()
+    {
+        $data = [
+            "title" => "Titulo",
+            "link" => "https://link.com",
+            "description" => "description",
+        ];
+
+        $tool = Tool::create($data);
+
+        $uri = route('api.tools.destroy', ['tool' => $tool]);
+
+        $this->json('DELETE', $uri)
+            ->assertStatus(204);
+    }
+
+    /**
+     * Testa se ocorre erro ao deletar um registro que nao existe.
+     */
+    public function test_if_delete_not_found_a_tool()
+    {
+        $tool = new Tool();
+        $tool->id = -1;
+
+        $uri = route('api.tools.destroy', ['tool' => $tool]);
+        $this->json('DELETE', $uri)
+            ->assertStatus(404);
     }
 }
