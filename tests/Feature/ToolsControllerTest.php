@@ -69,21 +69,45 @@ class ToolsControllerTest extends TestCase
             ->assertStatus($bad_request);
 
 
-        $data = ["name" => null];
+        $data = ["title" => null, 'link' => 'http://google.com'];
         $this->json('POST', $uri, $data)
             ->assertSee(json_encode(Lang::get('tools.validator.title.required')))
             ->assertStatus($bad_request);
 
 
-        $data = ["title" => "a"];
+        $data = ["title" => "a", 'link' => 'http://google.com'];
         $this->json('POST', $uri, $data)
             ->assertSee(json_encode(Lang::get('tools.validator.title.min')))
             ->assertStatus($bad_request);
 
 
-        $data = ["title" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book It has survive."];
+        $data = ["title" => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book It has survive.", 'link' => 'http://google.com'];
         $this->json('POST', $uri, $data)
             ->assertSee(json_encode(Lang::get('tools.validator.title.max')))
+            ->assertStatus($bad_request);
+
+
+        $data = ["title" => "Titulo", "link" => null];
+        $this->json('POST', $uri, $data)
+            ->assertSee(json_encode(Lang::get('tools.validator.link.required')))
+            ->assertStatus($bad_request);
+
+
+        $data = ["title" => "Titulo", "link" => "http"];
+        $this->json('POST', $uri, $data)
+            ->assertSee(json_encode(Lang::get('tools.validator.link.url')))
+            ->assertStatus($bad_request);
+
+
+        $data = ["title" => "Titulo", 'link' => 'http://google.com', "tags" => -1];
+        $this->json('POST', $uri, $data)
+            ->assertSee(json_encode(Lang::get('tools.validator.tags.array')))
+            ->assertStatus($bad_request);
+
+
+        $data = ["title" => "Titulo", 'link' => 'http://google.com', "tags" => "teste teste"];
+        $this->json('POST', $uri, $data)
+            ->assertSee(json_encode(Lang::get('tools.validator.tags.array')))
             ->assertStatus($bad_request);
     }
 

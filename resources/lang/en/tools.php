@@ -19,6 +19,9 @@ return [
     'validator.title.min' => 'O Titulo precisa ter mais do que 3 caracteres',
     'validator.title.max' => 'O Titulo não pode possuir mais que 255 caracteres',
 
+    'validator.link.required' => 'O campo de Link é obrigatório.',
+    'validator.link.url' => 'O campo de Link precisa ser uma URL',
+
     'validator.tags.array' => 'As Tags precisam ser um array de strings',
 
 ];

@@ -28,7 +28,7 @@ class ToolsRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'link' => 'required',
+            'link' => 'required|url',
             'tags' => 'sometimes|array',
             'tags.*' => 'sometimes|string'
         ];
@@ -46,6 +46,10 @@ class ToolsRequest extends FormRequest
             'title.required' => Lang::get('tools.validator.title.required'),
             'title.min' => Lang::get('tools.validator.title.min'),
             'title.max' => Lang::get('tools.validator.title.max'),
+            
+            'link.required' => Lang::get('tools.validator.link.required'),
+            'link.url' => Lang::get('tools.validator.link.url'),
+
             'tags.array' => Lang::get('tools.validator.tags.array'),
             'tags.*' => Lang::get('tools.validator.tags.array'),
         ];
