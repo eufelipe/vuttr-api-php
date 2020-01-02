@@ -35,7 +35,7 @@ class ToolsController extends Controller
      */
     public function index()
     {
-        return $this->load_tools_from_cache();
+        return $this->load_tools_from_cache(); 
     }
 
     /**

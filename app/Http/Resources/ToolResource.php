@@ -18,7 +18,8 @@ class ToolResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'link' => $this->link,
-            'description' => $this->description
+            'description' => $this->description,
+            'tags' => $this->tags
         ];
     }
 }

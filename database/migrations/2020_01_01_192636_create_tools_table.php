@@ -25,6 +25,7 @@ class CreateToolsTable extends Migration
             $table->string('title');
             $table->string('link');
             $table->text('description')->nullable();
+            $table->string('tags')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -19,4 +19,6 @@ return [
     'validator.title.min' => 'O Titulo precisa ter mais do que 3 caracteres',
     'validator.title.max' => 'O Titulo não pode possuir mais que 255 caracteres',
 
+    'validator.tags.array' => 'As Tags precisam ser um array de strings',
+
 ];
