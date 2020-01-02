@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 use App\Repositories\ToolRepository;
 use App\Http\Requests\ToolsRequest;
 use App\Http\Resources\ToolResource;
@@ -33,9 +35,14 @@ class ToolsController extends Controller
      * 
      * @return array
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->load_tools_from_cache(); 
+        $tag = $request->input('tag');
+        if(!is_null($tag)) {
+            return $this->load_tools_by_tag($tag);
+        }
+ 
+        return $this->load_tools_from_cache();
     }
 
     /**
@@ -51,6 +58,17 @@ class ToolsController extends Controller
 
         return $tools;
     }
+
+    /**
+     *  Filtar resultados por tags
+     */
+
+    public function load_tools_by_tag($tag)
+    {  
+        $tools = $this->toolRepository->like('tags', $tag); 
+        return ToolResource::collection($tools);
+    }
+
 
     /**
      * Funcionalidade para criar um novo registro.
