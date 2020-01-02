@@ -4,6 +4,10 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\AuthenticationException;
+use Laravel\Passport\Exceptions\OAuthServerException;
+use Illuminate\Support\Facades\Lang;
+use App\Constants\Constants;
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +50,57 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof OAuthServerException) { 
+
+            $description = Lang::get('auth.validator.unauthorized'); 
+            $error = $exception->getMessage();
+
+            switch ($error) {
+                case  "Client authentication failed":
+                    $description = Lang::get('auth.validator.client');
+
+                case  "The authorization grant type is not supported by the authorization server.":
+                    $description = Lang::get('auth.validator.grant_type');
+            };
+
+            return $this->render_response($description);
+        }
+
         return parent::render($request, $exception);
+    }
+
+    /**
+
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @return \Illuminate\Http\Response
+     */
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            $description = Lang::get('auth.validator.description'); 
+            return $this->render_response( $description);
+        }
+
+        return redirect()->guest('login');
+    }
+
+    /**
+     * Helper para renderizar response error
+     */
+    private function render_response( $description)
+    {
+        $status = Constants::UNAUTHORIZED_REQUEST;
+        $message = Lang::get('auth.validator.message');
+
+        $response = [
+            "code" => $status,
+            "message" => $message,
+            "description" => $description
+        ];
+        return response()->json($response, $status);
     }
 }

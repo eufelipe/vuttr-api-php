@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://localhost
+HOST: http://localhost:3001
 
 
 # API VUTTR
@@ -17,6 +17,77 @@ Nesse endpoint é possível verificar a versão e o heath da api
 + Response 200 (application/json)
     + Attributes (Version)
 
+# Group AUTH
+
+### Acesso não autorizado
+Qualquer endpoint acessado sem estar autenticado, receberá a resposta:
+ 
+
+```json
+{
+  "code": 401,
+  "message": "unauthorized",
+  "description": "Você precisa esta logado para acessar esse resource"
+}
+```
+
+Nessa condição, deverá redirecionar o usuário a tela de login.
+
+&nbsp;
+
+
+
+## Autenticação/Login [/oauth/token]
+
+### Autenticação [POST]
+
+
+O consumo de endpoints  na api é feita apenas através do envio de um **client_id** e um **client_secret** previamente cadastrado.
+
+`client_id=1`
+`client_secret=KLU0d23CvY6LrdbjnxgDS4BMupOHolSUWr6mDJwF`
+ 
+&nbsp;
+
+
++ Request Para obter um access_token e um refresh_token:
+
+    + Headers
+
+            Accept: application/json
+            Content-Type: application/json
+
+    + Attributes (Auth)
+
++ Response 200 (application/json)
+    + Attributes (AuthSuccess)
+
++ Response 401 (application/json)
+    + Attributes (AuthFailed)
+
+
+
+## Refresh Token [/oauth/token/refresh]
+
+### Renovação de Token [POST]
+
+A aplicação emiti tokens de acesso de curta duração, os usuários precisarão atualizar seus tokens de acesso por meio do token de atualização que lhes foi fornecido quando o token de acesso foi emitido.
+
++ Request Para obter um novo access_token a partir de refresh_token:
+
+    + Headers
+
+            Accept: application/json
+            Content-Type: application/json
+
+    + Attributes (RefreshToken)
+
++ Response 200 (application/json)
+    + Attributes (AuthSuccess)
+
++ Response 401 (application/json)
+    + Attributes (AuthFailed)
+
 
 
 # Group Ferramentas
@@ -30,6 +101,53 @@ Nesse endpoint é possível verificar a versão e o heath da api
 
 + Response 404 (application/json)
     + Attributes (Error)
+ 
+
+### Cadastrar uma nova ferramenta [POST]
+
+Api para cadastrar uma nova ferramenta.
+
++ Request para criar uma nova ferramenta
+
+    + Attributes (ToolCreate)
+
++ Response 201 (application/json)
+    + Attributes (ToolCreated)
+
+
+## Atualizar uma ferramenta [/tools/{id}]
+
++ Parameters
+    + id: 1 (number, required)
+    
+
+### Alterar uma ferramenta [PUT]
+Api para atualizar uma ferramenta
+
++ Request para Update de uma ferramenta
+
+    + Parameters
+        + id: 1 (number, required) - ID do ferramenta
+
+    + Attributes (ToolUpdate)
+
++ Response 200 (application/json)
+    + Attributes (ToolUpdate)
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
+
+
+### Deletar uma ferramenta [DELETE]
+
+Api para deletar uma ferramenta.
+
++ Response 204 (application/json) 
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
 
 
 
@@ -41,66 +159,11 @@ Nesse endpoint é possível verificar a versão e o heath da api
     + tag: node (string) - parametro de busca
 
 + Response 200 (application/json)
-    + Attributes (array[Tool_Filter])
+    + Attributes (array[ToolFilter])
 
 + Response 404 (application/json)
     + Attributes (Error)
 
-
-## Criar uma nova ferramentas [/tools]
-
-### Cadastrar uma nova ferramenta [POST]
-
-+ Request para criar uma nova ferramenta
-
-    + Headers
-
-            Accept: application/json
-            Content-Type: application/json
-
-    + Attributes (Tool_Create)
-
-+ Response 201 (application/json)
-    + Attributes (Tool_Created)
-
-
-## Atualizar uma ferramenta [/tools/{id}]
-### Alterar uma ferramenta [PUT]
-
-+ Request para Update de uma ferramenta
-
-+ Parameters
-    + id: 1 (number, required)
-
-+ Headers
-
-        Accept: application/json
-        Content-Type: application/json
-
-+ Attributes (Tool_Update)
-
-+ Response 200 (application/json)
-    + Attributes (Tool_Update)
-
-+ Response 404 (application/json)
-    + Attributes (Error)
-
-
-## Remover uma ferramenta [/tools/{id}]
-### Deletar uma ferramenta [DELETE]
-
-+ Parameters
-    + id: 1 (number, required)
-
-+ Headers
-
-        Accept: application/json
-        Content-Type: application/json
-
-+ Response 204 (application/json) 
-
-+ Response 404 (application/json)
-    + Attributes (Error)
 
 
 # Data Structures  
@@ -109,39 +172,66 @@ Nesse endpoint é possível verificar a versão e o heath da api
 + app_name: `VUTTR API` (string)
 + app_version: 1.0.0 (string)
 
+
+## Auth (object)
++ grant_type: password (string, required)
++ client_id: 1 (number, required)
++ client_secret: KLU0d23CvY6LrdbjnxgDS4BMupOHolSUWr6mDJwF (string, required)
++ username: admin@gmail.com (string, required)
++ password: 12345678 (string, required)
+
+## AuthSuccess
++ token_type: Bearer (string)
++ expires_in: 1295999 (number)
++ access_token: `AQUI O ACCESS TOKEN EM HASH JWT` (string)
++ refresh_token: `AQUI O REFRESH TOKEN EM HASH JWT` (string)
+
+## AuthFailed
++ code: 401 (number)
++ message: unauthorized (string)
++ description: Não foi possível realizar a autenticação (string)
+
+## RefreshToken (object)
++ grant_type: `refresh_token` (string, required)
++ client_id: 1 (number, required)
++ client_secret: KLU0d23CvY6LrdbjnxgDS4BMupOHolSUWr6mDJwF (string, required)
++ refresh_token: `AQUI O REFRESH TOKEN EM HASH JWT` (string, required) 
+
+
+
 ## Tool (object)
 + id (number)
 + title: Notion (string, required)
-+ link: https://notion.so (string)
++ link: `https://notion.so` (string)
 + description: All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. (string)
 + tags: organization,planning,collaboration,writing,calendar (array[string])
 
-## Tool_Filter (object)
+## ToolFilter (object)
 + id: 2 (number)
 + title: json-server (string, required)
-+ link: https://github.com/typicode/json-server (string)
++ link: `https://github.com/typicode/json-server` (string)
 + description: Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges. (string)
 + tags: api,json,schema,node,github,rest (array[string])
  
-## Tool_Create (object) 
+## ToolCreate (object) 
 + title: hotel (string, required)
-+ link: https://github.com/typicode/hotel (string)
++ link: `https://github.com/typicode/hotel` (string)
 + description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
-+ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string])
  
-## Tool_Created (object) 
+## ToolCreated (object) 
 + id: 5 (number)
 + title: hotel (string, required)
-+ link: https://github.com/typicode/hotel (string, required)
++ link: `https://github.com/typicode/hotel` (string, required)
 + description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
-+ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string])
  
-## Tool_Update (object) 
+## ToolUpdate (object) 
 + id: 2 (number, required)
 + title: hotel (string, required)
 + link: https://github.com/typicode/hotel (string)
 + description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
-+ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string])
  
 
 ## Error (object)
