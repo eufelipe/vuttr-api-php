@@ -1,0 +1,150 @@
+FORMAT: 1A
+HOST: http://localhost
+
+
+# API VUTTR
+
+API da aplicação VUTTR (Very Useful Tools to Remember) um repositório para gerenciar ferramentas com seus respectivos nomes, links, descrições e tags.
+
+# Group API
+
+## Sobre a API [/]
+
+### Versão da API [GET]
+
+Nesse endpoint é possível verificar a versão e o heath da api
+
++ Response 200 (application/json)
+    + Attributes (Version)
+
+
+
+# Group Ferramentas
+
+## Listagem de ferramentas [/tools]
+
+### Listar todas as ferramentas [GET]
+
++ Response 200 (application/json)
+    + Attributes (array[Tool])
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
+
+
+## Listar ferramentas utilizando um filtro de busca por tag  [/tools?tag={tag}]
+
+### Busca de ferramentas por filtro [GET]
+
++ Parameters
+    + tag: node (string) - parametro de busca
+
++ Response 200 (application/json)
+    + Attributes (array[Tool_Filter])
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
+
+## Criar uma nova ferramentas [/tools]
+
+### Cadastrar uma nova ferramenta [POST]
+
++ Request para criar uma nova ferramenta
+
+    + Headers
+
+            Accept: application/json
+            Content-Type: application/json
+
+    + Attributes (Tool_Create)
+
++ Response 201 (application/json)
+    + Attributes (Tool_Created)
+
+
+## Atualizar uma ferramenta [/tools/{id}]
+### Alterar uma ferramenta [PUT]
+
++ Request para Update de uma ferramenta
+
++ Parameters
+    + id: 1 (number, required)
+
++ Headers
+
+        Accept: application/json
+        Content-Type: application/json
+
++ Attributes (Tool_Update)
+
++ Response 200 (application/json)
+    + Attributes (Tool_Update)
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
+
+## Remover uma ferramenta [/tools/{id}]
+### Deletar uma ferramenta [DELETE]
+
++ Parameters
+    + id: 1 (number, required)
+
++ Headers
+
+        Accept: application/json
+        Content-Type: application/json
+
++ Response 204 (application/json) 
+
++ Response 404 (application/json)
+    + Attributes (Error)
+
+
+# Data Structures  
+
+## Version (object)
++ app_name: `VUTTR API` (string)
++ app_version: 1.0.0 (string)
+
+## Tool (object)
++ id (number)
++ title: Notion (string, required)
++ link: https://notion.so (string)
++ description: All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. (string)
++ tags: organization,planning,collaboration,writing,calendar (array[string])
+
+## Tool_Filter (object)
++ id: 2 (number)
++ title: json-server (string, required)
++ link: https://github.com/typicode/json-server (string)
++ description: Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges. (string)
++ tags: api,json,schema,node,github,rest (array[string])
+ 
+## Tool_Create (object) 
++ title: hotel (string, required)
++ link: https://github.com/typicode/hotel (string)
++ description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
+ 
+## Tool_Created (object) 
++ id: 5 (number)
++ title: hotel (string, required)
++ link: https://github.com/typicode/hotel (string, required)
++ description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
+ 
+## Tool_Update (object) 
++ id: 2 (number, required)
++ title: hotel (string, required)
++ link: https://github.com/typicode/hotel (string)
++ description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string)
++ tags: node,organizing,webapps,domain,developer,https,proxy (array[string]) - Listas de tags
+ 
+
+## Error (object)
++ code: 400 (number) - Status code
++ message (string) - Mensagem do erro (exception->message())
++ description (string) - Descrição do status
