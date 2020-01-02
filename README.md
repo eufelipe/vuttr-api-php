@@ -6,7 +6,7 @@ Aplicação para gerenciar ferramentas com seus respectivos nomes, links, descri
 
 ## Version
 
-```1.0.0```
+```1.1.0```
 
 ---
 

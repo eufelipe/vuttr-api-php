@@ -13,6 +13,12 @@ return [
     |
     */
 
+    'validator.message' => 'unauthorized',
+    'validator.description' => 'Você precisa esta logado para acessar esse resource',
+    'validator.unauthorized' => 'Não foi possível realizar a autenticação',
+    'validator.client' => 'Falha na autenticação do cliente',
+    'validator.grant_type' => 'O tipo de concessão de autorização não é suportado pelo servidor de autorização.',
+
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
