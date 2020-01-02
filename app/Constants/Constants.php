@@ -4,7 +4,7 @@ namespace App\Constants;
 
 class Constants
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.1.0';
 
     const NO_CONTENT_REQUEST = 204;
     const BAD_REQUEST = 400;
