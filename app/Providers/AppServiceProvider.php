@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
 
+use App\Models\Tool;
+use App\Observers\ToolObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Resource::withoutWrapping();
+
+        Tool::observe(ToolObserver::class);
     }
 }
