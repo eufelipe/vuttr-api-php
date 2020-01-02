@@ -14,7 +14,7 @@ Route::namespace('Api')
             ->name('api.') 
             ->group(function () {
 
-                 Route::resource('tools', 'ToolsController'); 
+                 Route::resource('/tools', 'ToolsController'); 
                  
         });
 
