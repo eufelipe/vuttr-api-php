@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
  
 Route::namespace('Api') 
             ->name('api.') 
+            ->middleware('auth:api')
             ->group(function () {
 
                  Route::resource('/tools', 'ToolsController'); 
