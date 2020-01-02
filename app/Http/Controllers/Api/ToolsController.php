@@ -36,4 +36,19 @@ class ToolsController extends Controller
 
         return new ToolResource($tool);
     }
+
+
+    /**
+     * Método para atualizar um registro.
+     * 
+     * @param \App\Http\Requests\ToolsRequest
+     * @return \App\Http\Resources\ToolResource
+     */
+    public function update(ToolsRequest $request, int $id)
+    {
+        $data = $request->all();
+        $tool = $this->toolRepository->update($data, $id);
+
+        return new ToolResource($tool);
+    }
 }

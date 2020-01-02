@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\ToolsController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Lang;
 
+use App\Models\Tool;
+
 
 class ToolsControllerTest extends TestCase
 {
@@ -90,5 +92,34 @@ class ToolsControllerTest extends TestCase
         $this->json('POST', $uri, $data)
             ->assertSee(json_encode(Lang::get('tools.validator.title.max')))
             ->assertStatus($bad_request);
+    }
+
+
+    /**
+     * Testa se é possivel atualizar um registro
+     */
+    public function test_if_can_update_a_tool_record()
+    {
+
+        $data = [
+            "title" => "Titulo",
+            "link" => "https://link.com",
+            "description" => "description",
+        ];
+
+        $tool = Tool::create($data);
+
+        $update = [ 
+            "title" => "Titulo updated",
+            "link" => "https://link.com.updated",
+            "description" => "description updated",
+        ];
+
+        $uri = route('api.tools.update', ['tool' => $tool]);
+        $this->json('PUT', $uri, $update)
+            ->assertStatus(200)
+            ->assertSee("Titulo updated")
+            ->assertSee("id");
+
     }
 }
